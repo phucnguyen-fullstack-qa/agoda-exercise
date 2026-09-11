@@ -10,11 +10,16 @@ export class AgodaBasePage extends BasePage {
     return {
       discountNotification: () => this.page.getByRole('heading', { name: 'Save 10% on your 1st app' }),
       closeDiscountNotificationButton: () => this.page.getByRole('button', { name: 'Close' }),
+      dismissCookieBannerButton: () => this.page.getByRole('button', { name: 'Dismiss' }),
       loadingSpinner: () => this.page.locator('#ModalLoadingSpinner'),
     };
   }
 
   async closeDiscountNotificationIfExisting() {
+    if (await this.elements.dismissCookieBannerButton().isVisible().catch(() => false)) {
+      await this.elements.dismissCookieBannerButton().click();
+    }
+
     if (await this.elements.discountNotification().isVisible().catch(() => false)) {
       await this.elements.closeDiscountNotificationButton().click();
     }
