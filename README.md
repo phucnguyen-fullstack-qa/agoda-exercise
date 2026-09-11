@@ -203,3 +203,7 @@ Only Chromium is enabled in the current Playwright configuration and manual work
 - Add Husky and lint-staged hooks to run formatting, ESLint, and targeted checks before commits.
 - Extend GitHub Actions with pull-request and branch triggers, then run the complete regression suite as a required quality gate.
 - Add browser matrix execution after Firefox and WebKit projects are enabled and verified.
+
+Report:
+<img width="1028" height="185" alt="image" src="https://github.com/user-attachments/assets/cf705285-fd24-4c16-9174-6f56544813db" />
+
