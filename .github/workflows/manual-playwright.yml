@@ -1,0 +1,87 @@
+name: Playwright Manual Automation Suite
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Select the test environment
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
+
+      test_folder:
+        description: Optional test folder or spec file path
+        required: false
+        default: regression-test-layer
+        type: string
+
+      browser:
+        description: Select the Playwright browser project
+        required: true
+        default: chromium
+        type: choice
+        options:
+          - chromium
+
+jobs:
+  test:
+    name: Run Playwright Automation Suite
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository source code.
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Set up Node.js for the test environment.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Install the pnpm version required by this project.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      # Install dependencies exactly from the lockfile.
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Install the selected Playwright browser and required Linux dependencies.
+      - name: Install Playwright Browser
+        run: pnpm exec playwright install --with-deps ${{ inputs.browser }}
+
+      # Run the requested test folder or test specification.
+      - name: Run Playwright Tests
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          echo "Environment: $ENVIRONMENT"
+          echo "Test path: ${{ inputs.test_folder }}"
+          echo "Browser: ${{ inputs.browser }}"
+
+          pnpm exec playwright test "${{ inputs.test_folder }}" --project="${{ inputs.browser }}"
+
+      # Upload reports whether the suite passes or fails.
+      - name: Upload Playwright Report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ inputs.environment }}-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      # Upload traces and videos for troubleshooting failed runs.
+      - name: Upload Test Results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ inputs.environment }}-${{ github.run_id }}
+          path: test-results/
+          retention-days: 14
