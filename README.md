@@ -149,6 +149,13 @@ pnpm lint
 
 The project uses strict TypeScript compiler settings, including `strict`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes`. The current TypeScript 7 and `@typescript-eslint` versions have an upstream compatibility limitation, so ESLint and `tsc --noEmit` should be revalidated after aligning those package versions.
 
+## Environment Variables
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `ENVIRONMENT` | Identifies the target test environment. | Not set |
+| `TEST_TIMEOUT_MS` | Maximum duration of each test case, in milliseconds. | `300000` |
+
 ## CI/CD
 
 The manual workflow is defined in `.github/workflows/manual-playwright.yml` and is started from **GitHub Actions > Playwright Manual Automation Suite > Run workflow**.

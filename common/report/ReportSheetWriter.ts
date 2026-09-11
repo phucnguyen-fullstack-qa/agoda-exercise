@@ -9,6 +9,8 @@ export interface ReportSheetRow {
   errorMessage?: string;
 }
 
+const reportSheetColumns = ['suiteName', 'testName', 'status', 'durationMs', 'errorMessage'] as const;
+
 /**
  * Collects test results in memory and hands them off to a report sheet.
  * For now this just writes a local CSV; swap `flush` for a Google Sheets /
@@ -26,14 +28,13 @@ export class ReportSheetWriter {
   }
 
   async flush(outputPath: string): Promise<void> {
-    const headers = ['suiteName', 'testName', 'status', 'durationMs', 'errorMessage'];
     const escapeCell = (value: string | number | undefined): string => {
       const cell = String(value ?? '');
       return /[",\r\n]/.test(cell) ? `"${cell.replaceAll('"', '""')}"` : cell;
     };
     const content = [
-      headers.join(','),
-      ...this.rows.map((row) => headers.map((header) => escapeCell(row[header])).join(',')),
+      reportSheetColumns.join(','),
+      ...this.rows.map((row) => reportSheetColumns.map((column) => escapeCell(row[column])).join(',')),
     ].join('\n');
 
     await mkdir(dirname(outputPath), { recursive: true });

@@ -61,6 +61,7 @@ jobs:
       - name: Run Playwright Tests
         env:
           ENVIRONMENT: ${{ inputs.environment }}
+          TEST_TIMEOUT_MS: ${{ secrets.TEST_TIMEOUT_MS }}
         run: |
           echo "Environment: $ENVIRONMENT"
           echo "Test path: ${{ inputs.test_folder }}"

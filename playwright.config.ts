@@ -5,6 +5,13 @@ if (existsSync('.env')) {
   process.loadEnvFile('.env');
 }
 
+const defaultTestTimeoutMs = 5 * 60 * 1000;
+const testTimeoutMs = Number(process.env.TEST_TIMEOUT_MS ?? defaultTestTimeoutMs);
+
+if (!Number.isFinite(testTimeoutMs) || testTimeoutMs <= 0) {
+  throw new Error('TEST_TIMEOUT_MS must be a positive number of milliseconds.');
+}
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -17,7 +24,7 @@ if (existsSync('.env')) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: 5 * 60 * 1000,
+  timeout: testTimeoutMs,
   testDir: '.',
   testMatch: [
     'regression-test-layer/**/*.spec.ts',
