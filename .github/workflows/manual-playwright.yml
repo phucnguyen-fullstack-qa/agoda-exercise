@@ -69,20 +69,13 @@ jobs:
 
           pnpm exec playwright test "${{ inputs.test_folder }}" --project="${{ inputs.browser }}"
 
-      # Upload reports whether the suite passes or fails.
-      - name: Upload Playwright Report
+      # Upload the HTML/CSV reports and failure diagnostics whether the suite passes or fails.
+      - name: Upload Playwright Artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ inputs.environment }}-${{ github.run_id }}
-          path: playwright-report/
-          retention-days: 14
-
-      # Upload traces and videos for troubleshooting failed runs.
-      - name: Upload Test Results
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ inputs.environment }}-${{ github.run_id }}
-          path: test-results/
+          name: playwright-artifacts-${{ inputs.environment }}-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 14

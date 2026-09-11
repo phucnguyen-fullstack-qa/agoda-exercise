@@ -37,12 +37,12 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
         await ui.agoda.homePage.setAdultsTo(booking.adults);
         await ui.agoda.homePage.setChildrenTo(booking.children);
 
-        await ui.agoda.homePage.selectChildrenAges(booking.childAges);
-
         expect(await ui.agoda.homePage.getNumberOfBookingRooms()).toBe(booking.rooms);
         expect(await ui.agoda.homePage.getNumberOfAdults()).toBe(booking.adults);
         expect(await ui.agoda.homePage.getNumberOfChildren()).toBe(booking.children);
         for (const [index, age] of booking.childAges.entries()) {
+            await ui.agoda.homePage.selectChildAge(index + 1, age);
+            await expect(ui.agoda.homePage.elements.childAgeOptionByRole(age)).toBeHidden();
             await expect(ui.agoda.homePage.elements.selectedAgeDropdownValue(index + 1))
                 .toContainText(`${age} years old`);
         }
