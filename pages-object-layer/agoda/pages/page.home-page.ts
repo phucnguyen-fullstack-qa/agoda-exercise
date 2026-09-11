@@ -143,6 +143,7 @@ export class AgodaHomePage extends AgodaBasePage {
         }
 
         await this.elements.childAgeOption(age).click();
+        await this.elements.childAgeOption(age).waitFor({ state: 'hidden' });
     }
 
     async selectChildrenAges(ages: number[]) {

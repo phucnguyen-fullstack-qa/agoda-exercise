@@ -23,6 +23,8 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
 
     await test.step('Step 1. Search for the keyword and select the exact hotel from the auto-suggest dropdown', async () => {
         await ui.agoda.homePage.goto(getAgodaPath(AgodaPath.home));
+        await expect(ui.agoda.homePage.elements.searchBoxContainer()).toBeVisible();
+
         await ui.agoda.homePage.closeDiscountNotificationIfExisting();
         await ui.agoda.homePage.searchForDestination(hotelBookingData.searchKey, hotelBookingData.searchDestination);
     });
