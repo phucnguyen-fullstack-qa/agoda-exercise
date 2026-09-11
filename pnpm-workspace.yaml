@@ -1,0 +1,2 @@
+overrides:
+  '@typescript-eslint/typescript-estree>typescript': ^6.0.0
