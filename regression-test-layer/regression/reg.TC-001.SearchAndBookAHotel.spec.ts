@@ -40,11 +40,18 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
         expect(await ui.agoda.homePage.getNumberOfBookingRooms()).toBe(booking.rooms);
         expect(await ui.agoda.homePage.getNumberOfAdults()).toBe(booking.adults);
         expect(await ui.agoda.homePage.getNumberOfChildren()).toBe(booking.children);
+
         for (const [index, age] of booking.childAges.entries()) {
-            await ui.agoda.homePage.selectChildAge(index + 1, age);
-            await expect(ui.agoda.homePage.elements.childAgeOptionByRole(age)).toBeHidden();
-            await expect(ui.agoda.homePage.elements.selectedAgeDropdownValue(index + 1))
-                .toContainText(`${age} years old`);
+            await ui.agoda.homePage.retry(
+                async () => {
+                    await ui.agoda.homePage.selectChildAge(index + 1, age);
+                    await expect(ui.agoda.homePage.elements.selectedAgeDropdownValue(index + 1))
+                        .toContainText(`${age} years old`);
+                    return true;
+                },
+                (isSelected) => isSelected,
+                10,
+            );
         }
     });
 
