@@ -36,18 +36,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Set up Node.js for the test environment.
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
       # Install the pnpm version required by this project.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 11
+
+      # Set up Node.js and enable pnpm dependency caching.
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
 
       # Install dependencies exactly from the lockfile.
       - name: Install Dependencies
