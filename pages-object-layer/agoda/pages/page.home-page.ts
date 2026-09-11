@@ -45,7 +45,7 @@ export class AgodaHomePage extends AgodaBasePage {
                     .locator('[data-element-name="occ-child-age-dropdown"]')
                     .nth(childIndex - 1),
             childAgeOption: (age: number) =>
-                this.page
+                this.page.getByRole('listbox')
                     .getByText(age === 0 ? '<1 year old' : `${age} years old`, { exact: true }),
             childAgeOptionByRole: (age: number) =>
                 this.page.getByRole('option', {
