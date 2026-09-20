@@ -2,15 +2,23 @@ import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
 if (existsSync('.env')) {
-  process.loadEnvFile('.env');
+    process.loadEnvFile('.env');
 }
 
 const defaultTestTimeoutMs = 5 * 60 * 1000;
 const testTimeoutMs = Number(process.env.TEST_TIMEOUT_MS ?? defaultTestTimeoutMs);
 
 if (!Number.isFinite(testTimeoutMs) || testTimeoutMs <= 0) {
-  throw new Error('TEST_TIMEOUT_MS must be a positive number of milliseconds.');
+    throw new Error('TEST_TIMEOUT_MS must be a positive number of milliseconds.');
 }
+
+const runId = new Date()
+    .toISOString()
+    .replace('T', '_')
+    .replaceAll(':', '-')
+    .replace(/\.\d{3}Z$/, '');
+
+const reportDirectory = `reports/${runId}`;
 
 /**
  * Read environment variables from file.
@@ -24,42 +32,45 @@ if (!Number.isFinite(testTimeoutMs) || testTimeoutMs <= 0) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: testTimeoutMs,
-  testDir: '.',
-  testMatch: [
-    'regression-test-layer/**/*.spec.ts',
-  ],
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  retries: 0,
-  /* Opt out of parallel tests on CI. */
-  ...(process.env.CI ? { workers: 1 } : {}),
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['list'], ['html'], ['./common/report/ReportSheetReporter.ts']],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+    timeout: testTimeoutMs,
+    testDir: '.',
+    testMatch: ['regression-test-layer/**/*.spec.ts'],
+    /* Run tests in files in parallel */
+    fullyParallel: true,
+    /* Fail the build on CI if you accidentally left test.only in the source code. */
+    forbidOnly: !!process.env.CI,
+    retries: 0,
+    /* Opt out of parallel tests on CI. */
+    ...(process.env.CI ? { workers: 1 } : {}),
+    /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+    reporter: [
+        ['list'],
+        ['html', { outputFolder: `${reportDirectory}/html`, open: 'never' }],
+        ['./common/report/ReportSheetReporter.ts', { outputDir: reportDirectory }],
+    ],
 
-    /* Collect trace and video for every test run. */
-    trace: 'on',
-    video: 'on',
-  },
+    /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+    use: {
+        /* Base URL to use in actions like `await page.goto('')`. */
+        // baseURL: 'http://localhost:3000',
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+        /* Collect trace and video for every test run. */
+        trace: 'on',
+        video: 'on',
     },
-  ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+    /* Configure projects for major browsers */
+    projects: [
+        {
+            name: 'chromium',
+            use: { ...devices['Desktop Chrome'] },
+        },
+    ],
+
+    /* Run your local dev server before starting the tests */
+    // webServer: {
+    //   command: 'npm run start',
+    //   url: 'http://localhost:3000',
+    //   reuseExistingServer: !process.env.CI,
+    // },
 });

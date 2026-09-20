@@ -1,7 +1,6 @@
-import type { Page } from "@playwright/test";
-import { AgodaBasePage } from "../base/page.base-page";
-import { DatePicker } from "../components/component.date-picker";
-
+import type { Page } from '@playwright/test';
+import { AgodaBasePage } from '../base/page.base-page';
+import { DatePicker } from '../components/component.date-picker';
 
 export class AgodaHomePage extends AgodaBasePage {
     datePicker: DatePicker;
@@ -41,19 +40,19 @@ export class AgodaHomePage extends AgodaBasePage {
             numberOfChildrenValue: () => this.elements.occupancyChildren().locator('//*[@data-component="desktop-occ-children-value"]'),
             increaseChildrenButton: () => this.elements.occupancyChildren().locator('//*[@data-selenium="plus"]'),
             childrenAgeDropdown: (childIndex: number) =>
-                this.elements.occupancyFocusTrap()
+                this.elements
+                    .occupancyFocusTrap()
                     .locator('[data-element-name="occ-child-age-dropdown"]')
                     .nth(childIndex - 1),
-            childAgeOption: (age: number) =>
-                this.page.getByRole('listbox')
-                    .getByText(age === 0 ? '<1 year old' : `${age} years old`, { exact: true }),
+            childAgeOption: (age: number) => this.page.getByRole('listbox').getByText(age === 0 ? '<1 year old' : `${age} years old`, { exact: true }),
             childAgeOptionByRole: (age: number) =>
                 this.page.getByRole('option', {
                     name: age === 0 ? '<1 year old' : `${age} years old`,
                     exact: true,
                 }),
             selectedAgeDropdownValue: (childIndex: number) =>
-                this.elements.occupancyFocusTrap()
+                this.elements
+                    .occupancyFocusTrap()
                     .locator('[data-element-name="occ-child-age-dropdown"]')
                     .nth(childIndex - 1),
             searchButton: () => this.elements.searchBoxContainer().getByRole('button', { name: 'SEARCH', exact: true }),
@@ -112,10 +111,9 @@ export class AgodaHomePage extends AgodaBasePage {
     }
 
     private async getChildAgeDropdown(childIndex: number) {
-        const attributeDropdowns = this.elements.occupancyFocusTrap()
-            .locator('[data-element-name="occ-child-age-dropdown"]');
+        const attributeDropdowns = this.elements.occupancyFocusTrap().locator('[data-element-name="occ-child-age-dropdown"]');
 
-        if (await attributeDropdowns.count() >= childIndex) {
+        if ((await attributeDropdowns.count()) >= childIndex) {
             return attributeDropdowns.nth(childIndex - 1);
         }
 
@@ -137,7 +135,7 @@ export class AgodaHomePage extends AgodaBasePage {
         await dropdown.press('Space');
 
         const roleOption = this.elements.childAgeOptionByRole(age);
-        if (await roleOption.count() > 0) {
+        if ((await roleOption.count()) > 0) {
             await roleOption.click();
             return;
         }
@@ -166,11 +164,11 @@ export class AgodaHomePage extends AgodaBasePage {
     async setBookingRoomsTo(targetNumber: number) {
         this.validateTargetNumber(targetNumber);
 
-        while (await this.getNumberOfBookingRooms() < targetNumber) {
+        while ((await this.getNumberOfBookingRooms()) < targetNumber) {
             await this.increaseBookingRoom();
         }
 
-        while (await this.getNumberOfBookingRooms() > targetNumber) {
+        while ((await this.getNumberOfBookingRooms()) > targetNumber) {
             await this.decreaseBookingRoom();
         }
     }
@@ -178,11 +176,11 @@ export class AgodaHomePage extends AgodaBasePage {
     async setAdultsTo(targetNumber: number) {
         this.validateTargetNumber(targetNumber);
 
-        while (await this.getNumberOfAdults() < targetNumber) {
+        while ((await this.getNumberOfAdults()) < targetNumber) {
             await this.increaseAdults();
         }
 
-        while (await this.getNumberOfAdults() > targetNumber) {
+        while ((await this.getNumberOfAdults()) > targetNumber) {
             await this.decreaseAdults();
         }
     }
@@ -202,8 +200,7 @@ export class AgodaHomePage extends AgodaBasePage {
             await this.elements.childrenAgeDropdown(currentNumberOfChildren).waitFor({ state: 'hidden' });
         }
 
-        const ageDropdowns = this.elements.occupancyFocusTrap()
-            .locator('[data-element-name="occ-child-age-dropdown"]');
+        const ageDropdowns = this.elements.occupancyFocusTrap().locator('[data-element-name="occ-child-age-dropdown"]');
         await this.retry(
             async () => await ageDropdowns.count(),
             (dropdownCount) => dropdownCount >= targetNumber,

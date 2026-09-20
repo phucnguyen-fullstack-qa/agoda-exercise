@@ -151,9 +151,9 @@ The project uses strict TypeScript compiler settings, including `strict`, `noUnc
 
 ## Environment Variables
 
-| Variable | Purpose | Default |
-| --- | --- | --- |
-| `ENVIRONMENT` | Identifies the target test environment. | Not set |
+| Variable          | Purpose                                              | Default  |
+| ----------------- | ---------------------------------------------------- | -------- |
+| `ENVIRONMENT`     | Identifies the target test environment.              | Not set  |
 | `TEST_TIMEOUT_MS` | Maximum duration of each test case, in milliseconds. | `300000` |
 
 ## CI/CD
@@ -162,11 +162,11 @@ The manual workflow is defined in `.github/workflows/manual-playwright.yml` and 
 
 Workflow inputs:
 
-| Input | Purpose | Current options |
-| --- | --- | --- |
-| `environment` | Sets `ENVIRONMENT` for the run | `production` |
-| `test_folder` | Test folder or spec file path | Defaults to `regression-test-layer` |
-| `browser` | Playwright project to execute | `chromium` |
+| Input         | Purpose                        | Current options                     |
+| ------------- | ------------------------------ | ----------------------------------- |
+| `environment` | Sets `ENVIRONMENT` for the run | `production`                        |
+| `test_folder` | Test folder or spec file path  | Defaults to `regression-test-layer` |
+| `browser`     | Playwright project to execute  | `chromium`                          |
 
 The workflow checks out the source, installs pnpm 11 and Node 24, restores the pnpm cache, installs dependencies from the lockfile, installs Chromium with Linux dependencies, and runs the requested Playwright command. It uploads both `playwright-report/` and `test-results/` for passed and failed runs, retaining them for 14 days.
 
@@ -206,4 +206,3 @@ Only Chromium is enabled in the current Playwright configuration and manual work
 
 Report:
 <img width="1028" height="185" alt="image" src="https://github.com/user-attachments/assets/cf705285-fd24-4c16-9174-6f56544813db" />
-

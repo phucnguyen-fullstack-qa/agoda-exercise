@@ -1,33 +1,35 @@
 {
-  "name": "amaris_automation_exercise",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.20.0",
-      "onFail": "download"
+    "name": "amaris_automation_exercise",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "lint": "eslint ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "^11.20.0",
+            "onFail": "download"
+        }
+    },
+    "type": "module",
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@playwright/test": "^1.63.0",
+        "@types/archiver": "^8.0.0",
+        "@types/node": "^26.5.0",
+        "@typescript-eslint/eslint-plugin": "^8.70.0",
+        "@typescript-eslint/parser": "^8.70.0",
+        "archiver": "^8.0.0",
+        "eslint": "^10.10.0",
+        "eslint-plugin-playwright": "^2.11.0",
+        "prettier": "^3.9.8",
+        "typescript": "^7.0.2"
     }
-  },
-  "type": "module",
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.63.0",
-    "@types/archiver": "^8.0.0",
-    "@types/node": "^26.5.0",
-    "@typescript-eslint/eslint-plugin": "^8.70.0",
-    "@typescript-eslint/parser": "^8.70.0",
-    "archiver": "^8.0.0",
-    "eslint": "^10.10.0",
-    "eslint-plugin-playwright": "^2.11.0",
-    "typescript": "^7.0.2"
-  }
 }

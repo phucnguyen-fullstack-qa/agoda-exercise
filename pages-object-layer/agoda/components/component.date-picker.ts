@@ -35,7 +35,7 @@ export class DatePicker extends BasePage {
                 const visibleMonths = this.elements.months();
                 const matchingMonth = this.elements.month(date);
 
-                if (await matchingMonth.count() > 0 && await matchingMonth.first().isVisible()) {
+                if ((await matchingMonth.count()) > 0 && (await matchingMonth.first().isVisible())) {
                     await this.elements.day(date).click();
                     return true;
                 }
@@ -90,7 +90,6 @@ export class DatePicker extends BasePage {
             throw new Error('date must be a valid Date');
         }
     }
-
 
     async selectCheckInDate(date: Date) {
         this.validateDate(date);

@@ -1,14 +1,14 @@
 {
-  "searchKey": "Muong Thanh Luxury",
-  "searchDestination": "Muong Thanh Luxury Khanh Hoa, Nha Trang",
-  "checkInDateOffset": 30,
-  "checkOutDateOffset": 31,
-  "booking": {
-    "rooms": 1,
-    "adults": 2,
-    "children": 2,
-    "childAges": [3, 12],
-    "roomGroupIndex": 1,
-    "offerIndex": 0
-  }
+    "searchKey": "Muong Thanh Luxury",
+    "searchDestination": "Muong Thanh Luxury Khanh Hoa, Nha Trang",
+    "checkInDateOffset": 30,
+    "checkOutDateOffset": 31,
+    "booking": {
+        "rooms": 1,
+        "adults": 2,
+        "children": 2,
+        "childAges": [3, 12],
+        "roomGroupIndex": 1,
+        "offerIndex": 0
+    }
 }

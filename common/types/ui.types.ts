@@ -1,16 +1,11 @@
-import type {
-  AgodaHomePage,
-  AgodaHotelDetailPage,
-  AgodaPaymentPage,
-  AgodaSearchResultPage,
-} from '@pages-object-layer/agoda/index';
+import type { AgodaHomePage, AgodaHotelDetailPage, AgodaPaymentPage, AgodaSearchResultPage } from '@pages-object-layer/agoda/index';
 
 /** Pages exposed under `ui.agoda.<pageName>`, sourced from the Agoda barrel. */
 export interface AgodaUi {
-  homePage: AgodaHomePage;
-  searchResultPage: AgodaSearchResultPage;
-  hotelDetailPage: AgodaHotelDetailPage;
-  paymentPage: AgodaPaymentPage;
+    homePage: AgodaHomePage;
+    searchResultPage: AgodaSearchResultPage;
+    hotelDetailPage: AgodaHotelDetailPage;
+    paymentPage: AgodaPaymentPage;
 }
 
 /**
@@ -19,5 +14,5 @@ export interface AgodaUi {
  * `index.ts` barrel export.
  */
 export interface Ui {
-  agoda: AgodaUi;
+    agoda: AgodaUi;
 }

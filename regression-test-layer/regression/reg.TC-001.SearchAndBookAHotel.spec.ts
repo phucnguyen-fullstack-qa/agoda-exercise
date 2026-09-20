@@ -8,8 +8,7 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
     const checkInDate = DateHelper.addDay(new Date(), hotelBookingData.checkInDateOffset);
     const checkOutDate = DateHelper.addDay(new Date(), hotelBookingData.checkOutDateOffset);
     const stayLength = hotelBookingData.checkOutDateOffset - hotelBookingData.checkInDateOffset;
-    const selectedHotelName = hotelBookingData.searchDestination.split(',')[0]?.trim()
-        ?? hotelBookingData.searchDestination;
+    const selectedHotelName = hotelBookingData.searchDestination.split(',')[0]?.trim() ?? hotelBookingData.searchDestination;
     const expectedCheckInLabel = DateHelper.formatDateToAgodaLabel(checkInDate);
     const expectedCheckOutLabel = DateHelper.formatDateToAgodaLabel(checkOutDate);
     let selectedHotel: { name: string; price: string };
@@ -45,8 +44,7 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
             await ui.agoda.homePage.retry(
                 async () => {
                     await ui.agoda.homePage.selectChildAge(index + 1, age);
-                    await expect(ui.agoda.homePage.elements.selectedAgeDropdownValue(index + 1))
-                        .toContainText(`${age} years old`);
+                    await expect(ui.agoda.homePage.elements.selectedAgeDropdownValue(index + 1)).toContainText(`${age} years old`);
                     return true;
                 },
                 (isSelected) => isSelected,
@@ -67,9 +65,7 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
     });
 
     await test.step('Step 4. Select an available room option that displays a suggested price, then verify that the hotel price is displayed and the displayed hotel name matches the selected hotel', async () => {
-        selectedHotel = await ui.agoda.searchResultPage.selectAvailableHotelWithSuggestedPrice(
-            selectedHotelName,
-        );
+        selectedHotel = await ui.agoda.searchResultPage.selectAvailableHotelWithSuggestedPrice(selectedHotelName);
 
         ui.agoda.hotelDetailPage.setPage(ui.agoda.searchResultPage.getPage());
         await expect(ui.agoda.hotelDetailPage.elements.hotelHeaderName()).toContainText(selectedHotelName);
@@ -78,10 +74,7 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
     });
 
     await test.step('Step 5. Scroll down to the booking details section. Select the second room type in the list and click its first “Book” button', async () => {
-        selectedRoom = await ui.agoda.hotelDetailPage.selectRoomAndBook(
-            booking.roomGroupIndex,
-            booking.offerIndex,
-        );
+        selectedRoom = await ui.agoda.hotelDetailPage.selectRoomAndBook(booking.roomGroupIndex, booking.offerIndex);
 
         ui.agoda.paymentPage.setPage(ui.agoda.hotelDetailPage.getPage());
     });
@@ -89,27 +82,13 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
     await test.step('Step 6. Verify that the user is successfully navigated to the Payment page & verify that the key information on the Payment page matches your previous selections', async () => {
         await expect(ui.agoda.paymentPage.elements.bookingDetailsForm()).toBeVisible();
         await expect(ui.agoda.paymentPage.elements.pageHeader()).toBeVisible();
-
-        await expect(ui.agoda.paymentPage.elements.propertyName())
-            .toContainText(selectedHotel.name);
-
-        await expect(ui.agoda.paymentPage.elements.roomHeading())
-            .toContainText(`1 x ${selectedRoom.name}`);
-
+        await expect(ui.agoda.paymentPage.elements.propertyName()).toContainText(selectedHotel.name);
+        await expect(ui.agoda.paymentPage.elements.roomHeading()).toContainText(`1 x ${selectedRoom.name}`);
         await expect(ui.agoda.paymentPage.elements.maxOccupancy()).toBeVisible();
-
-        await expect(ui.agoda.paymentPage.elements.checkInDate())
-            .toHaveText(expectedCheckInLabel);
-
-        await expect(ui.agoda.paymentPage.elements.checkOutDate())
-            .toHaveText(expectedCheckOutLabel);
-
-        await expect(ui.agoda.paymentPage.elements.stayLength())
-            .toContainText(String(stayLength));
-
-        await expect(ui.agoda.paymentPage.elements.roomPrice())
-            .toContainText(selectedRoom.price);
-
+        await expect(ui.agoda.paymentPage.elements.checkInDate()).toHaveText(expectedCheckInLabel);
+        await expect(ui.agoda.paymentPage.elements.checkOutDate()).toHaveText(expectedCheckOutLabel);
+        await expect(ui.agoda.paymentPage.elements.stayLength()).toContainText(String(stayLength));
+        await expect(ui.agoda.paymentPage.elements.roomPrice()).toContainText(selectedRoom.price);
         await expect(ui.agoda.paymentPage.elements.totalPrice()).toBeVisible();
     });
 });
