@@ -11,8 +11,11 @@ import { ReportSheetWriter } from './ReportSheetWriter';
  */
 export default class ReportSheetReporter implements Reporter {
     private readonly writer = new ReportSheetWriter();
-    private readonly outputPath = 'playwright-report/report-sheet.csv';
-    private readonly artifactsDirectory = 'playwright-report';
+    private readonly outputDirectory: string;
+
+    constructor(options: { outputDir?: string } = {}) {
+        this.outputDirectory = options.outputDir ?? 'playwright-report';
+    }
 
     onBegin(_config: FullConfig, _suite: Suite): void {
         // TODO: prepare/reset the report sheet destination.
@@ -29,19 +32,20 @@ export default class ReportSheetReporter implements Reporter {
     }
 
     async onEnd(_result: FullResult): Promise<void> {
-        await this.writer.flush(this.outputPath);
+        await this.writer.flush(join(this.outputDirectory, 'report-sheet.csv'));
         await this.archiveArtifacts();
+        console.log(`\nHTML report: pnpm exec playwright show-report ${join(this.outputDirectory, 'html')}`);
     }
 
     private async archiveArtifacts(): Promise<void> {
-        await mkdir(this.artifactsDirectory, { recursive: true });
+        await mkdir(this.outputDirectory, { recursive: true });
 
         const timestamp = new Date()
             .toISOString()
             .replace('T', '_')
             .replaceAll(':', '-')
             .replace(/\.\d{3}Z$/, '');
-        const outputPath = join(this.artifactsDirectory, `playwright-report-${timestamp}.zip`);
+        const outputPath = join(this.outputDirectory, `playwright-report-${timestamp}.zip`);
         const output = createWriteStream(outputPath);
         const archive = new ZipArchive({ zlib: { level: 9 } });
 
@@ -52,7 +56,7 @@ export default class ReportSheetReporter implements Reporter {
         });
 
         archive.pipe(output);
-        archive.directory('playwright-report', 'playwright-report');
+        archive.directory(join(this.outputDirectory, 'html'), 'html');
         archive.directory('test-results', 'test-results');
         await archive.finalize();
         await archiveComplete;
