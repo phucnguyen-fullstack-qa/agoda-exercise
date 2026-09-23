@@ -81,7 +81,6 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
     await test.step('Step 6. Verify that the user is successfully navigated to the Payment page & verify that the key information on the Payment page matches your previous selections', async () => {
         await expect(ui.agoda.paymentPage.elements.bookingDetailsForm()).toBeVisible();
         await expect(ui.agoda.paymentPage.elements.pageHeader()).toBeVisible();
-        // Fix
         await expect(ui.agoda.paymentPage.elements.propertyName()).toContainText(selectedHotel.name);
         await expect(ui.agoda.paymentPage.elements.roomHeading()).toContainText(`1 x ${selectedRoom.name}`);
         await expect(ui.agoda.paymentPage.elements.maxOccupancy()).toBeVisible();

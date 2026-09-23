@@ -1,7 +1,6 @@
 import type { Page } from '@playwright/test';
 import { BasePage } from '@common/base/base-page';
 
-
 export class AgodaBasePage extends BasePage {
     constructor(page: Page) {
         super(page);
@@ -58,10 +57,7 @@ export class AgodaBasePage extends BasePage {
             throw new Error('checkInDateOffset must be a non-negative integer.');
         }
 
-        if (
-            !Number.isInteger(data.checkOutDateOffset) ||
-            data.checkOutDateOffset <= data.checkInDateOffset
-        ) {
+        if (!Number.isInteger(data.checkOutDateOffset) || data.checkOutDateOffset <= data.checkInDateOffset) {
             throw new Error('checkOutDateOffset must be greater than checkInDateOffset.');
         }
 
@@ -76,7 +72,6 @@ export class AgodaBasePage extends BasePage {
         if (booking.childAges.some((age) => !Number.isInteger(age) || age < 0 || age > 17)) {
             throw new Error('Each child age must be an integer from 0 to 17.');
         }
-
     }
     async waitForLoadingSpinner(timeout = 30_000): Promise<void> {
         await this.elements.loadingSpinner().waitFor({ state: 'hidden', timeout });

@@ -10,7 +10,7 @@ const pageClasses = {
 };
 
 export function createListOfPage(page: Page): AgodaUi {
-    const cache = new Map<keyof typeof pageClasses, any>();
+    const cache = new Map<keyof typeof pageClasses, AgodaUi[keyof AgodaUi]>();
 
     return new Proxy({} as AgodaUi, {
         get(_, prop: keyof typeof pageClasses) {

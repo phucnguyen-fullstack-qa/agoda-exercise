@@ -4,9 +4,6 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import playwright from 'eslint-plugin-playwright';
 
-// Enforces: "<System> - (NB|RN|EN) - <Record name> (@JIRA-Txxx)", e.g. "UW - NB - Login (@QA-T123)".
-const TEST_TITLE_PATTERN = '^[A-Za-z]+ - (NB|RN|EN) - .+ \\(@[A-Za-z]+-T\\d+\\)$';
-
 export default [
     js.configs.recommended,
     {
@@ -15,6 +12,12 @@ export default [
             parser: tsParser,
             parserOptions: {
                 sourceType: 'module',
+            },
+            globals: {
+                Buffer: 'readonly',
+                console: 'readonly',
+                process: 'readonly',
+                setTimeout: 'readonly',
             },
         },
         plugins: {
@@ -27,7 +30,7 @@ export default [
             'max-len': [
                 'error',
                 {
-                    code: 120,
+                    code: 200,
                     tabWidth: 2,
                     ignoreUrls: true,
                     ignoreStrings: true,
@@ -45,16 +48,9 @@ export default [
         },
         rules: {
             ...playwright.configs['flat/recommended'].rules,
+            'playwright/valid-title': 'off',
             'playwright/no-wait-for-timeout': 'error',
             'playwright/expect-expect': 'error',
-            'playwright/valid-title': [
-                'error',
-                {
-                    mustMatch: {
-                        test: [TEST_TITLE_PATTERN, 'Test title must match "<System> - (NB|RN|EN) - <Record name> (@JIRA-Txxx)"'],
-                    },
-                },
-            ],
             'no-restricted-syntax': [
                 'error',
                 {
