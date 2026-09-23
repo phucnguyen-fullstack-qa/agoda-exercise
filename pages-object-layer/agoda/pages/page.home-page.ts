@@ -186,7 +186,7 @@ export class AgodaHomePage extends AgodaBasePage {
     }
 
     async setChildrenTo(targetNumber: number) {
-        this.validateTargetNumber(targetNumber);
+        await this.validateTargetNumber(targetNumber);
         let currentNumberOfChildren = await this.getNumberOfChildren();
         while (currentNumberOfChildren < targetNumber) {
             await this.increaseChildren();
@@ -216,6 +216,9 @@ export class AgodaHomePage extends AgodaBasePage {
     async validateTargetNumber(targetNumber: number) {
         if (!Number.isInteger(targetNumber) || targetNumber < 0) {
             throw new Error('targetNumber must be a non-negative integer');
+        }
+        if (targetNumber === 0) {
+            throw new Error('targetNumber must be greater than 0');
         }
     }
 }

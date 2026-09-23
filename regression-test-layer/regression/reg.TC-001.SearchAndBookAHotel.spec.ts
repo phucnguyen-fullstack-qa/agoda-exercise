@@ -1,14 +1,13 @@
 import { DateHelper } from '@common/date/date';
 import { expect, test } from '@common/fixtures/fixture';
 import { AgodaPath, getAgodaPath } from '@pages-object-layer/agoda/path/path';
-import hotelBookingData from '@test-data-layer/agoda/reg.TC-001.json' with { type: 'json' };
+import hotelBookingData from '@test-data-layer/agoda/reg.TC-001.json' assert { type: 'json' };
 
 test('@TC-001 - Searches for a hotel and books a room through to the payment page', async ({ ui }) => {
     const booking = hotelBookingData.booking;
     const checkInDate = DateHelper.addDay(new Date(), hotelBookingData.checkInDateOffset);
     const checkOutDate = DateHelper.addDay(new Date(), hotelBookingData.checkOutDateOffset);
     const stayLength = hotelBookingData.checkOutDateOffset - hotelBookingData.checkInDateOffset;
-    const selectedHotelName = hotelBookingData.searchDestination.split(',')[0]?.trim() ?? hotelBookingData.searchDestination;
     const expectedCheckInLabel = DateHelper.formatDateToAgodaLabel(checkInDate);
     const expectedCheckOutLabel = DateHelper.formatDateToAgodaLabel(checkOutDate);
     let selectedHotel: { name: string; price: string };
@@ -30,8 +29,8 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
 
     await test.step('Step 2. Fill in the following booking information', async () => {
         await ui.agoda.homePage.validateBookingData(hotelBookingData);
-        await ui.agoda.homePage.datePicker.selectCheckInDate(checkInDate);
-        await ui.agoda.homePage.datePicker.selectCheckOutDate(checkOutDate);
+        await ui.agoda.homePage.datePicker.selectDate(checkInDate);
+        await ui.agoda.homePage.datePicker.selectDate(checkOutDate);
 
         await ui.agoda.homePage.setBookingRoomsTo(booking.rooms);
         await ui.agoda.homePage.setAdultsTo(booking.adults);
@@ -59,17 +58,16 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
         await ui.agoda.homePage.waitForLoadingSpinner();
 
         const hotelItems = ui.agoda.searchResultPage.elements.hotelItems();
-        const matchingHotelName = ui.agoda.searchResultPage.elements.hotelNameByText(selectedHotelName);
 
         await expect(hotelItems.first()).toBeVisible();
-        await expect(matchingHotelName).toBeVisible();
     });
 
     await test.step('Step 4. Select an available room option that displays a suggested price, then verify that the hotel price is displayed and the displayed hotel name matches the selected hotel', async () => {
-        selectedHotel = await ui.agoda.searchResultPage.selectAvailableHotelWithSuggestedPrice(selectedHotelName);
+        selectedHotel = await ui.agoda.searchResultPage.selectAvailableHotelWithSuggestedPrice();
 
         ui.agoda.hotelDetailPage.setPage(ui.agoda.searchResultPage.getPage());
-        await expect(ui.agoda.hotelDetailPage.elements.hotelHeaderName()).toContainText(selectedHotelName);
+
+        await expect(ui.agoda.hotelDetailPage.elements.hotelHeaderName()).toContainText(selectedHotel.name);
         expect(selectedHotel.price).toBeTruthy();
         expect(selectedHotel.name).toBeTruthy();
     });

@@ -90,14 +90,4 @@ export class DatePicker extends BasePage {
             throw new Error('date must be a valid Date');
         }
     }
-
-    async selectCheckInDate(date: Date) {
-        this.validateDate(date);
-        await this.selectDate(date);
-    }
-
-    async selectCheckOutDate(date: Date) {
-        this.validateDate(date);
-        await this.selectDate(date);
-    }
 }
