@@ -206,3 +206,8 @@ Only Chromium is enabled in the current Playwright configuration and manual work
 
 Report:
 <img width="1028" height="185" alt="image" src="https://github.com/user-attachments/assets/cf705285-fd24-4c16-9174-6f56544813db" />
+<img width="1114" height="673" alt="image" src="https://github.com/user-attachments/assets/f5092a09-006f-44fa-8534-a3dda464ba84" />
+
+
+NOTE
+**CI is currently experiencing an issue where the IP is switching to the US and prices are not being separated as they are for Vietnam; this will be improved later.**
