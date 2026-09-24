@@ -1,7 +1,7 @@
-import type { Dialog, Locator, Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 export class BasePage {
-    constructor(protected page: Page) {}
+    constructor(protected page: Page) { }
 
     setPage(page: Page): void {
         this.page = page;
@@ -55,35 +55,6 @@ export class BasePage {
         throw new Error(`Retry condition was not met within ${retrySeconds} seconds`);
     }
 
-    async customClick(locator: Locator): Promise<void> {
-        await this.waitForElement(locator);
-        await locator.click();
-    }
-
-    async customFill(locator: Locator, value: string): Promise<void> {
-        await this.waitForElement(locator);
-        await locator.fill(value);
-    }
-
-    async customType(locator: Locator, value: string): Promise<void> {
-        await this.waitForElement(locator);
-        await locator.pressSequentially(value);
-    }
-
-    async customCheck(locator: Locator): Promise<void> {
-        await this.waitForElement(locator);
-        await locator.check();
-    }
-
-    async customHover(locator: Locator): Promise<void> {
-        await this.waitForElement(locator);
-        await locator.hover();
-    }
-
-    async waitForElement(locator: Locator, state: 'attached' | 'detached' | 'visible' | 'hidden' = 'visible'): Promise<void> {
-        await locator.waitFor({ state });
-    }
-
     async waitForLoadingSpinner(timeout = 30_000): Promise<void> {
         await this.page.locator('.ModalLoadingSpinner__content').first().waitFor({ state: 'hidden', timeout });
     }
@@ -103,38 +74,7 @@ export class BasePage {
         );
     }
 
-    async getText(locator: Locator): Promise<string> {
-        await this.waitForElement(locator);
-        return (await locator.textContent())?.trim() ?? '';
-    }
-
-    async isElementVisible(locator: Locator): Promise<boolean> {
-        return locator.isVisible();
-    }
-
-    handleAlert(action: 'accept' | 'dismiss' = 'accept', promptText?: string): void {
-        this.page.once('dialog', async (dialog: Dialog) => {
-            if (action === 'accept') {
-                await dialog.accept(promptText);
-            } else {
-                await dialog.dismiss();
-            }
-        });
-    }
-
-    async takeScreenshot(name: string): Promise<Buffer> {
-        return this.page.screenshot({ path: `test-results/screenshots/${name}.png`, fullPage: true });
-    }
-
     async goto(url: string): Promise<void> {
         await this.page.goto(url);
-    }
-
-    async waitForPageLoad(state: 'load' | 'domcontentloaded' | 'networkidle' = 'domcontentloaded'): Promise<void> {
-        await this.page.waitForLoadState(state);
-    }
-
-    async reload(): Promise<void> {
-        await this.page.reload();
     }
 }
