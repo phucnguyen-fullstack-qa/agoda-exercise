@@ -53,7 +53,7 @@ test('@TC-001 - Searches for a hotel and books a room through to the payment pag
         }
     });
 
-    await test.step('Step 3. Click Search and verify that the selected hotel appears in the search results page', async () => {
+    await test.step('Step 3. Click Search and verify that hotel search results are displayed', async () => {
         await ui.agoda.homePage.clickSearchButton();
         await ui.agoda.homePage.waitForLoadingSpinner();
 
