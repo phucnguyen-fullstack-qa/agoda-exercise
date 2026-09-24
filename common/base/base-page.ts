@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 
 export class BasePage {
-    constructor(protected page: Page) { }
+    constructor(protected page: Page) {}
 
     setPage(page: Page): void {
         this.page = page;
